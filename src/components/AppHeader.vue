@@ -17,7 +17,8 @@ export default {
         <div class="header">
             <h1>BOOLFLIX</h1>
             <div class="search">
-                <input type="text" v-model="store.search" class="form-control" placeholder="Cerca film e serie tv...">
+                <input type="text" @keyup.enter="$emit('doSearch')" v-model="store.search" class="form-control"
+                    placeholder="Cerca film e serie tv...">
                 <button @click="$emit('doSearch')" class="btn btn-danger">CERCA</button>
             </div>
         </div>
