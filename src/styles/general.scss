@@ -1,4 +1,4 @@
-@import "bootstrap";
+@use "bootstrap";
 @use './partials/variables';
 
 //Font source (importato con npm add @fontsource/open-sans-condensed)
@@ -12,4 +12,13 @@
 
 body {
     font-family: "Open Sans Condensed", sans-serif;
+}
+
+header {
+    height: 80px;
+}
+
+main {
+    height: calc(100vh - 80px);
+    background-color: variables.$color-main;
 }
