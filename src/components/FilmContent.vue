@@ -33,11 +33,7 @@ export default {
                     imageUrl = '/sp.png'
                     break;
 
-                case 'ja':
-                    imageUrl = '/jp.png'
-                    break;
-
-                case 'kr':
+                case 'ko':
                     imageUrl = '/kr.png'
                     break;
             }
@@ -53,7 +49,9 @@ export default {
     <div>
         <h2>{{ title }}</h2>
         <h2>{{ originalTitle }}</h2>
-        <h4 v-if="this.language !== 'it' && 'fr' && 'en' && 'sp' && 'jp' && 'kr'"> {{ language }}</h4>
+        <h4
+            v-if="this.language !== 'it' && this.language !== 'fr' && this.language !== 'en' && this.language !== 'es' && this.language !== 'ko'">
+            {{ language }}</h4>
         <img v-else :src="getFlagImage()">
         <h4>{{ vote }}</h4>
     </div>
