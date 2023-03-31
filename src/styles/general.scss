@@ -1,0 +1,15 @@
+@import "bootstrap";
+@use './partials/variables';
+
+//Font source (importato con npm add @fontsource/open-sans-condensed)
+@import "@fontsource/open-sans-condensed";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans Condensed", sans-serif;
+}
