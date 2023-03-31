@@ -1,8 +1,15 @@
 <script>
 import { store } from '../store.js';
 
+import FilmContent from './FilmContent.vue';
+import SerieContent from './SerieContent.vue';
+
 export default {
     name: 'AppMain',
+    components: {
+        FilmContent,
+        SerieContent
+    },
     data() {
         return {
             store
@@ -14,23 +21,19 @@ export default {
 
 <template>
     <main>
-        <div class="container bg-white pt-3">
-            <h2>FILM</h2>
+        <div class="container bg-white w-100">
+            <h2 class="fw-bold">FILM</h2>
             <div class="wrapper">
                 <div v-for="(film, i) in store.filmList" class="film">
-                    <h2>{{ film.title }}</h2>
-                    <h2>{{ film.original_title }}</h2>
-                    <h4>{{ film.original_language }}</h4>
-                    <h4>{{ film.vote_average }}</h4>
+                    <FilmContent :title="film.title" :originalTitle="film.original_title" :language="film.original_language"
+                        :vote="film.vote_average" :key="i" />
                 </div>
             </div>
-            <h2>SERIE</h2>
+            <h2 class="fw-bold">SERIE</h2>
             <div class="wrapper">
                 <div v-for="(serie, i) in store.serieList" class="serie">
-                    <h2>{{ serie.name }}</h2>
-                    <h2>{{ serie.original_name }}</h2>
-                    <h4>{{ serie.original_language }}</h4>
-                    <h4>{{ serie.vote_average }}</h4>
+                    <SerieContent :title="serie.name" :originalTitle="serie.original_name"
+                        :language="serie.original_language" :vote="serie.vote_average" :key="i" />
                 </div>
             </div>
         </div>
@@ -43,15 +46,23 @@ export default {
 .wrapper {
     display: flex;
     flex-wrap: wrap;
+    text-align: center;
+    width: 100%;
 
     .film {
         background-color: black;
+        color: variables.$color-white;
         margin: 10px;
+        width: calc(100% / 4 - 20px);
+        height: 400px;
     }
 
     .serie {
         background-color: black;
+        color: variables.$color-white;
         margin: 10px;
+        width: calc(100% / 4 - 20px);
+        height: 400px;
     }
 }
 </style>
