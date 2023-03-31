@@ -2,10 +2,12 @@
 export default {
     name: 'FilmContent',
     props: {
+        image: String,
         title: String,
         originalTitle: String,
         language: String,
-        vote: String
+        vote: String,
+        trama: String
     },
     data() {
         return {
@@ -39,6 +41,24 @@ export default {
             }
 
             return imageUrl;
+        },
+        getBackdropImage() {
+            let imageUrl = 'https://image.tmdb.org/t/p/w342';
+            let backdropImage = imageUrl + this.image;
+            return backdropImage;
+        },
+        getStar() {
+            let vote = 0;
+            let votation = '';
+            for (let i = 0; i < 5; i++) {
+                if (vote <= this.vote) {
+                    votation += `<i class="fa-solid fa-star"></i>`;
+                } else {
+                    votation += `<i class="fa-regular fa-star"></i>`;
+                }
+                vote++;
+            }
+            return votation;
         }
     }
 }
@@ -46,22 +66,78 @@ export default {
 </script>
 
 <template>
-    <div>
-        <h2>{{ title }}</h2>
-        <h2>{{ originalTitle }}</h2>
-        <h4
-            v-if="this.language !== 'it' && this.language !== 'fr' && this.language !== 'en' && this.language !== 'es' && this.language !== 'ko'">
-            {{ language }}</h4>
-        <img v-else :src="getFlagImage()">
-        <h4>{{ vote }}</h4>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img :src="getBackdropImage()" alt="backdrop image">
+            </div>
+            <div class="flip-card-back overflow-hidden">
+                <h3 class="pt-3">{{ title }}</h3>
+                <h3>{{ originalTitle }}</h3>
+                <h4
+                    v-if="this.language !== 'it' && this.language !== 'fr' && this.language !== 'en' && this.language !== 'es' && this.language !== 'ko'">
+                    {{ language }}</h4>
+                <img class="language-img" v-else :src="getFlagImage()">
+                <div v-html="getStar()"></div>
+                <p>{{ trama }}</p>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 @use '../styles/partials/variables';
+@use '../styles/partials/mixins';
 
-img {
+.flip-card {
+    background-color: transparent;
+    @include mixins.max-wh;
+    perspective: 1000px;
+}
+
+.flip-card-inner {
+    position: relative;
+    @include mixins.max-wh;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front {
+    @include mixins.flip-card;
+    background-color: #bbb;
+    color: black;
+}
+
+.flip-card-back {
+    @include mixins.flip-card;
+    background-color: black;
+    color: white;
+    transform: rotateY(180deg);
+}
+
+.flip-card-front img {
+    @include mixins.max-wh;
+    object-fit: cover;
+    object-position: bottom;
+}
+
+h3 {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.language-img {
     width: 30px;
     height: 30px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 12px;
+    margin-top: 10px;
 }
 </style>

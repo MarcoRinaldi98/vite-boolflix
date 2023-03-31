@@ -1,0 +1,33 @@
+@use './variables';
+
+@mixin d-flex-wrap-center {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+@mixin d-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin card-display {
+    color: variables.$color-white;
+    margin: 10px;
+    width: calc(100% / 4 - 20px);
+    height: 400px;
+}
+
+@mixin flip-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+@mixin max-wh {
+    width: 100%;
+    height: 100%;
+}

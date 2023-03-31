@@ -21,19 +21,21 @@ export default {
 
 <template>
     <main>
-        <div class="container bg-white w-100">
-            <h2 class="fw-bold">FILM</h2>
+        <div class="container w-100">
+            <h2 class="fw-bold text-white py-3">FILM</h2>
             <div class="wrapper">
                 <div v-for="(film, i) in store.filmList" class="film">
-                    <FilmContent :title="film.title" :originalTitle="film.original_title" :language="film.original_language"
-                        :vote="film.vote_average" :key="i" />
+                    <FilmContent :image="film.poster_path" :title="film.title" :originalTitle="film.original_title"
+                        :language="film.original_language" :vote="Math.floor(film.vote_average / 2)" :trama="film.overview"
+                        :key="i" />
                 </div>
             </div>
-            <h2 class="fw-bold">SERIE</h2>
+            <h2 class="fw-bold text-white py-3">SERIE</h2>
             <div class="wrapper">
                 <div v-for="(serie, i) in store.serieList" class="serie">
-                    <SerieContent :title="serie.name" :originalTitle="serie.original_name"
-                        :language="serie.original_language" :vote="serie.vote_average" :key="i" />
+                    <SerieContent :image="serie.poster_path" :title="serie.name" :originalTitle="serie.original_name"
+                        :language="serie.original_language" :vote="Math.floor(serie.vote_average / 2)"
+                        :trama="serie.overview" :key="i" />
                 </div>
             </div>
         </div>
@@ -42,27 +44,19 @@ export default {
 
 <style lang="scss" scoped>
 @use '../styles/partials/variables';
+@use '../styles/partials/mixins';
 
 .wrapper {
-    display: flex;
-    flex-wrap: wrap;
+    @include mixins.d-flex-wrap-center;
     text-align: center;
     width: 100%;
 
     .film {
-        background-color: black;
-        color: variables.$color-white;
-        margin: 10px;
-        width: calc(100% / 4 - 20px);
-        height: 400px;
+        @include mixins.card-display;
     }
 
     .serie {
-        background-color: black;
-        color: variables.$color-white;
-        margin: 10px;
-        width: calc(100% / 4 - 20px);
-        height: 400px;
+        @include mixins.card-display;
     }
 }
 </style>

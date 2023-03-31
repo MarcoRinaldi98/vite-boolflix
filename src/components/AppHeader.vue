@@ -26,12 +26,11 @@ export default {
 
 <style lang="scss" scoped>
 @use '../styles/partials/variables';
+@use '../styles/partials/mixins';
 
 .header {
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include mixins.d-flex-between;
     background-color: variables.$color-black;
 
     h1 {
