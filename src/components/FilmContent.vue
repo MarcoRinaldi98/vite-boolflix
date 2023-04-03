@@ -1,4 +1,6 @@
 <script>
+import { store } from '../store.js';
+
 export default {
     name: 'FilmContent',
     props: {
@@ -11,7 +13,7 @@ export default {
     },
     data() {
         return {
-
+            store
         }
     },
     methods: {
@@ -86,6 +88,9 @@ export default {
                 <img class="language-img" v-else :src="getFlagImage()">
                 <div v-html="getStar()"></div>
                 <p>{{ trama }}</p>
+                <div v-if="store.castList.length > 0" class="text-white">
+                    {{ store.castList }}
+                </div>
             </div>
         </div>
     </div>

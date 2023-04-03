@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios';
+
 import { store } from '../store.js';
 
 import FilmContent from './FilmContent.vue';
@@ -14,6 +16,20 @@ export default {
         return {
             store
         }
+    },
+    methods: {
+        getFilmCast(id) {
+            this.store.castList = [];
+
+            let urlCastApi = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=97153ebbe3459c0d939b47dd1103baa8`;
+
+            for (let i = 0; i < 5; i++) {
+                axios.get(urlCastApi)
+                    .then(response => {
+                        this.store.castList.push(response.data.cast[i].name);
+                    })
+            }
+        }
     }
 }
 
@@ -22,10 +38,17 @@ export default {
 <template>
     <main>
         <div v-if="this.store.filmList.length > 0 || this.store.serieList.length > 0">
+            <div class="text-center py-3">
+                <label for="genere" class="text-white fs-3 pe-2">Filtra per genere:</label>
+                <select class="scelta-genere" name="genere" id="genere" v-model="store.select" @change="$emit('doChange')">
+                    <option value="" selected>All</option>
+                    <option v-for="(genre, i) in store.genresList" :value="genre.id[0]" :key="i">{{ genre.name }}</option>
+                </select>
+            </div>
             <div class="container w-100">
                 <h2 v-show="this.store.filmList.length > 0" class="fw-bold text-white py-3">FILM</h2>
                 <div class="wrapper">
-                    <div v-for="(film, i) in store.filmList" class="film">
+                    <div v-for="(film, i) in store.filmList" class="film" @click="getFilmCast(film.id)">
                         <FilmContent :image="film.poster_path" :title="film.title" :originalTitle="film.original_title"
                             :language="film.original_language" :vote="Math.floor(film.vote_average / 2)"
                             :trama="film.overview" :key="i" />
@@ -59,6 +82,12 @@ export default {
 <style lang="scss" scoped>
 @use '../styles/partials/variables';
 @use '../styles/partials/mixins';
+
+.scelta-genere {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
 
 .wrapper {
     @include mixins.d-flex-wrap-center;

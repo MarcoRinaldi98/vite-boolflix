@@ -4,6 +4,9 @@ export const store = reactive(
     {
         filmList: [],
         serieList: [],
-        search: ''
+        castList: [],
+        genresList: [],
+        search: '',
+        select: ''
     }
 )

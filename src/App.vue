@@ -4,7 +4,7 @@
   </header>
 
   <main>
-    <AppMain />
+    <AppMain @doChange="showFilteredGenre" />
   </main>
 </template>
 
@@ -56,10 +56,30 @@ export default {
           this.store.serieList = [];
           console.log('La ricerca non ha dato risultati');
         })
+    },
+    getAllGenres() {
+      let urlGenresApi = 'https://api.themoviedb.org/3/genre/movie/list?api_key=97153ebbe3459c0d939b47dd1103baa8';
+
+      axios.get(urlGenresApi)
+        .then(response => {
+          this.store.genresList = response.data.genres;
+        })
+    },
+    showFilteredGenre() {
+      this.store.filmList = [];
+
+      let urlFiltered = `https://api.themoviedb.org/3/search/movie?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT&query=${store.search}&genre_ids=${store.select}`;
+
+      axios.get(urlFiltered)
+        .then(response => {
+          this.store.filmList = response.data.results;
+        })
+
     }
   },
   created() {
     this.getFilmsAndSeries();
+    this.getAllGenres();
   }
 }
 
