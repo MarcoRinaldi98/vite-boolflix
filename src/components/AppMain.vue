@@ -64,6 +64,7 @@ export default {
     @include mixins.d-flex-wrap-center;
     text-align: center;
     width: 100%;
+    cursor: pointer;
 
     .film {
         @include mixins.card-display;

@@ -15,7 +15,10 @@ export default {
 <template>
     <header>
         <div class="header">
-            <h1>BOOLFLIX</h1>
+            <a href="#" class="text-decoration-none">
+                <h1>BOOLFLIX</h1>
+            </a>
+
             <div class="search">
                 <input type="text" @keyup.enter="$emit('doSearch')" v-model="store.search" class="form-control"
                     placeholder="Cerca film e serie tv...">

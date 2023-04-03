@@ -44,7 +44,13 @@ export default {
         },
         getBackdropImage() {
             let imageUrl = 'https://image.tmdb.org/t/p/w342';
-            let backdropImage = imageUrl + this.image;
+            let backdropImage;
+            if (this.image == null) {
+                backdropImage = './null.jpg';
+            } else {
+                backdropImage = imageUrl + this.image;
+            }
+
             return backdropImage;
         },
         getStar() {
