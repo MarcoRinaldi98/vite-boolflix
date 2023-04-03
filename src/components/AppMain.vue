@@ -29,6 +29,18 @@ export default {
                         this.store.castList.push(response.data.cast[i].name);
                     })
             }
+        },
+        getSerieCast(id) {
+            this.store.castList = [];
+
+            let urlCastApi = `https://api.themoviedb.org/3/tv/${id}/credits?api_key=97153ebbe3459c0d939b47dd1103baa8`;
+
+            for (let i = 0; i < 5; i++) {
+                axios.get(urlCastApi)
+                    .then(response => {
+                        this.store.castList.push(response.data.cast[i].name);
+                    })
+            }
         }
     }
 }
@@ -56,7 +68,7 @@ export default {
                 </div>
                 <h2 v-show="this.store.serieList.length > 0" class="fw-bold text-white py-3">SERIE</h2>
                 <div class="wrapper">
-                    <div v-for="(serie, i) in store.serieList" class="serie">
+                    <div v-for="(serie, i) in store.serieList" class="serie" @click="getSerieCast(serie.id)">
                         <SerieContent :image="serie.poster_path" :title="serie.name" :originalTitle="serie.original_name"
                             :language="serie.original_language" :vote="Math.floor(serie.vote_average / 2)"
                             :trama="serie.overview" :key="i" />
@@ -65,7 +77,7 @@ export default {
             </div>
         </div>
         <div
-            v-else-if="this.store.search.length > 0 && this.store.filmList.length == 0 && this.store.serieList.length == 0">
+            v-else-if="this.store.search.length > 0 && (this.store.filmList.length == 0 && this.store.serieList.length == 0)">
             <h1 class="text-center text-white pt-5">
                 Nessun Risultato
             </h1>

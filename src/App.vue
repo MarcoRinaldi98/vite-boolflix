@@ -67,12 +67,19 @@ export default {
     },
     showFilteredGenre() {
       this.store.filmList = [];
+      this.store.serieList = [];
 
-      let urlFiltered = `https://api.themoviedb.org/3/search/movie?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT&query=${store.search}&genre_ids=${store.select}`;
+      let urlFilteredFilm = `https://api.themoviedb.org/3/search/movie?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT&query=${store.search}&genre_ids=${store.select}`;
+      let urlFilteredSerie = `https://api.themoviedb.org/3/search/tv?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT&query=${store.search}&genre_ids=${store.select}`;
 
-      axios.get(urlFiltered)
+      axios.get(urlFilteredFilm)
         .then(response => {
           this.store.filmList = response.data.results;
+        })
+
+      axios.get(urlFilteredSerie)
+        .then(response => {
+          this.store.serieList = response.data.results;
         })
 
     }
