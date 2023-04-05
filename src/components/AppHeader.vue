@@ -3,6 +3,7 @@ import { store } from '../store.js';
 
 export default {
     name: 'AppHeader',
+    emits: ['performSearch'],
     data() {
         return {
             store
@@ -20,9 +21,9 @@ export default {
             </a>
 
             <div class="search">
-                <input type="text" @keyup.enter="$emit('doSearch')" v-model="store.search" class="form-control"
+                <input type="text" @keyup.enter="$emit('performSearch')" v-model="store.search" class="form-control"
                     placeholder="Cerca film e serie tv...">
-                <button @click="$emit('doSearch')" class="btn btn-danger">CERCA</button>
+                <button @click="$emit('performSearch')" class="btn btn-danger">CERCA</button>
             </div>
         </div>
     </header>

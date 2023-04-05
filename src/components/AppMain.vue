@@ -3,14 +3,12 @@ import axios from 'axios';
 
 import { store } from '../store.js';
 
-import FilmContent from './FilmContent.vue';
-import SerieContent from './SerieContent.vue';
+import AppCard from './AppCard.vue';
 
 export default {
     name: 'AppMain',
     components: {
-        FilmContent,
-        SerieContent
+        AppCard
     },
     data() {
         return {
@@ -18,7 +16,7 @@ export default {
         }
     },
     methods: {
-        getFilmCast(id) {
+        getMovieCast(id) {
             this.store.castList = [];
 
             let urlCastApi = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=97153ebbe3459c0d939b47dd1103baa8`;
@@ -49,45 +47,39 @@ export default {
 
 <template>
     <main>
-        <div v-if="this.store.filmList.length > 0 || this.store.serieList.length > 0">
-            <div class="text-center py-3">
-                <label for="genere" class="text-white fs-3 pe-2">Filtra per genere:</label>
-                <select class="scelta-genere" name="genere" id="genere" v-model="store.select" @change="$emit('doChange')">
-                    <option value="" selected>All</option>
-                    <option v-for="(genre, i) in store.genresList" :value="genre.id[0]" :key="i">{{ genre.name }}</option>
-                </select>
+        <section v-if="store.movies.length > 0 || store.series.length > 0" class="text-center py-3">
+            <label for="genere" class="text-white fs-3 pe-2">Filtra per genere:</label>
+            <select class="scelta-genere" name="genere" id="genere" v-model="store.select" @change="$emit('doChange')">
+                <option value="" selected>All</option>
+                <option v-for="(genre, i) in store.allGenres" :value="genre.id" :key="i">{{ genre.name }}</option>
+            </select>
+        </section>
+
+        <section v-if="store.movies.length > 0" class="container w-100">
+            <h2 class="fw-bold text-white py-3">FILM</h2>
+            <div class="wrapper">
+                <AppCard class="film" v-for="movie in store.movies" :key="movie.id" :item="movie"
+                    v-show="movie.genre_ids.includes(store.select) || store.select == ''" @click="getMovieCast(movie.id)" />
             </div>
-            <div class="container w-100">
-                <h2 v-show="this.store.filmList.length > 0" class="fw-bold text-white py-3">FILM</h2>
-                <div class="wrapper">
-                    <div v-for="(film, i) in store.filmList" class="film" @click="getFilmCast(film.id)">
-                        <FilmContent :image="film.poster_path" :title="film.title" :originalTitle="film.original_title"
-                            :language="film.original_language" :vote="Math.floor(film.vote_average / 2)"
-                            :trama="film.overview" :key="i" />
-                    </div>
-                </div>
-                <h2 v-show="this.store.serieList.length > 0" class="fw-bold text-white py-3">SERIE</h2>
-                <div class="wrapper">
-                    <div v-for="(serie, i) in store.serieList" class="serie" @click="getSerieCast(serie.id)">
-                        <SerieContent :image="serie.poster_path" :title="serie.name" :originalTitle="serie.original_name"
-                            :language="serie.original_language" :vote="Math.floor(serie.vote_average / 2)"
-                            :trama="serie.overview" :key="i" />
-                    </div>
-                </div>
+        </section>
+
+        <section v-if="store.series.length > 0" class="container w-100">
+            <h2 class="fw-bold text-white py-3">SERIE</h2>
+            <div class="wrapper">
+                <AppCard class="serie" v-for="serie in store.movies" :key="serie.id" :item="serie"
+                    v-show="serie.genre_ids.includes(store.select) || store.select == ''" @click="getSerieCast(serie.id)" />
             </div>
-        </div>
-        <div
-            v-else-if="this.store.search.length > 0 && (this.store.filmList.length == 0 && this.store.serieList.length == 0)">
-            <h1 class="text-center text-white pt-5">
-                Nessun Risultato
-            </h1>
-        </div>
-        <div v-else>
-            <h1 class="text-center text-white pt-5">
-                Cerca i film e le serie tv che preferisci
-                <i class="fa-solid fa-square-arrow-up-right"></i>
-            </h1>
-        </div>
+        </section>
+        <h1 class="text-center text-white pt-5"
+            v-if="store.search.length > 0 && store.movies.length == 0 && store.series.length == 0">
+            Nessun Risultato
+        </h1>
+
+        <h1 class="text-center text-white pt-5"
+            v-if="store.search.length == 0 && store.movies.length == 0 && store.series.length == 0">
+            Cerca i film e le serie tv che preferisci
+            <i class="fa-solid fa-square-arrow-up-right"></i>
+        </h1>
     </main>
 </template>
 

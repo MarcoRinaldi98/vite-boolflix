@@ -1,10 +1,10 @@
 <template>
   <header>
-    <AppHeader @doSearch="getFilmsAndSeries" />
+    <AppHeader @performSearch="doSearch" />
   </header>
 
   <main>
-    <AppMain @doChange="showFilteredGenre" />
+    <AppMain />
   </main>
 </template>
 
@@ -27,66 +27,62 @@ export default {
     }
   },
   methods: {
-    getFilmsAndSeries() {
+    doSearch() {
+      this.getMovies();
+      this.getSeries();
+    },
+    getMovies() {
+      axios.get(`https://api.themoviedb.org/3/search/movie?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT&query=${store.search}`)
+        .then(response => {
+          this.store.movies = response.data.results;
+        })
+    },
+    getSeries() {
+      axios.get(`https://api.themoviedb.org/3/search/tv?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT&query=${store.search}`)
+        .then(response => {
+          this.store.series = response.data.results;
+        })
+    },
+    mergeGenres() {
+      this.store.allGenres = [];
 
-      let urlFilmApi = 'https://api.themoviedb.org/3/search/movie?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT';
-      let urlSeriesApi = 'https://api.themoviedb.org/3/search/tv?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT'
-
-      if (store.search.length > 0) {
-        urlFilmApi += `&query=${store.search}`;
-        urlSeriesApi += `&query=${store.search}`;
+      for (let i = 0; i < this.store.genresMovies.length; i++) {
+        const currentGenre = this.store.genresMovies[i];
+        this.store.allGenres.push({ ...currentGenre });
       }
 
-      axios.get(urlFilmApi)
-        .then(response => {
-          this.store.filmList = response.data.results;
-        })
-        .catch(err => {
-          console.log(err.message);
-          this.store.filmList = [];
-          console.log('La ricerca non ha dato risultati');
-        })
+      for (let i = 0; i < this.store.genresSeries.length; i++) {
+        const currentGenreSerie = this.store.genresSeries[i];
 
-      axios.get(urlSeriesApi)
-        .then(response => {
-          this.store.serieList = response.data.results;
-        })
-        .catch(err => {
-          console.log(err.message);
-          this.store.serieList = [];
-          console.log('La ricerca non ha dato risultati');
-        })
-    },
-    getAllGenres() {
-      let urlGenresApi = 'https://api.themoviedb.org/3/genre/movie/list?api_key=97153ebbe3459c0d939b47dd1103baa8';
+        let found = false;
 
-      axios.get(urlGenresApi)
-        .then(response => {
-          this.store.genresList = response.data.genres;
-        })
-    },
-    showFilteredGenre() {
-      this.store.filmList = [];
-      this.store.serieList = [];
-
-      let urlFilteredFilm = `https://api.themoviedb.org/3/search/movie?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT&query=${store.search}&genre_ids=${store.select}`;
-      let urlFilteredSerie = `https://api.themoviedb.org/3/search/tv?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT&query=${store.search}&genre_ids=${store.select}`;
-
-      axios.get(urlFilteredFilm)
-        .then(response => {
-          this.store.filmList = response.data.results;
-        })
-
-      axios.get(urlFilteredSerie)
-        .then(response => {
-          this.store.serieList = response.data.results;
-        })
-
+        for (let x = 0; x < this.store.allGenres.length; x++) {
+          const currentGenreAll = this.store.allGenres[x];
+          if (currentGenreSerie.id == currentGenreAll.id) {
+            found = true;
+          }
+        }
+        if (found == false) {
+          this.store.allGenres.push({ ...currentGenreSerie });
+        }
+      }
     }
   },
   created() {
-    this.getFilmsAndSeries();
-    this.getAllGenres();
+    this.getMovies();
+
+    axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT`)
+      .then(response => {
+        this.store.genresMovies = response.data.genres;
+        this.mergeGenres();
+      })
+
+    axios.get(`https://api.themoviedb.org/3/genre/tv/list?api_key=97153ebbe3459c0d939b47dd1103baa8&language=it-IT`)
+      .then(response => {
+        this.store.genresSeries = response.data.genres;
+        this.mergeGenres();
+      })
+
   }
 }
 

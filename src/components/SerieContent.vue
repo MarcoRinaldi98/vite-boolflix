@@ -56,15 +56,13 @@ export default {
             return backdropImage;
         },
         getStar() {
-            let vote = 0;
             let votation = '';
-            for (let i = 0; i < 5; i++) {
+            for (let vote = 0; vote < 5; vote++) {
                 if (vote <= this.vote) {
                     votation += `<i class="fa-solid fa-star"></i>`;
                 } else {
                     votation += `<i class="fa-regular fa-star"></i>`;
                 }
-                vote++;
             }
             return votation;
         }

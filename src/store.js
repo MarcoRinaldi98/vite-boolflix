@@ -2,11 +2,13 @@ import { reactive } from 'vue';
 
 export const store = reactive(
     {
-        filmList: [],
-        serieList: [],
-        castList: [],
-        genresList: [],
+        movies: [],
+        series: [],
         search: '',
-        select: ''
+        genresMovies: [],
+        genresSeries: [],
+        allGenres: [],
+        select: '',
+        castList: []
     }
 )
